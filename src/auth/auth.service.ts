@@ -36,9 +36,29 @@ export class AuthService {
     }
   }
 
-  signIn() {
-    return {
-      message: 'I have signed in.',
-    };
+  async signIn(dto: AuthDto) {
+    // find the user by email
+    const user = await this.prisma.user.findFirst({
+      where: {
+        email: dto.email,
+      }
+    })
+
+    // if user doesn't exist, throw exception
+    if (!user) {
+      throw new BadRequestException('User does not exist.');
+    }
+
+    // compare password
+    const isPwdMatched = await argon.verify(user.hash, dto.password);
+    // if password incorrect, throw exception
+    if (!isPwdMatched) {
+      throw new BadRequestException('Password incorrect.');
+    }
+
+    // send back the user
+    delete user.hash;
+
+    return user;
   }
 }
