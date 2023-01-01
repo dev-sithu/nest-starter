@@ -10,5 +10,15 @@ services:
       - 5432:5432
     networks:
       - freecodecamp
+  test-db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgrespw
+      - POSTGRES_DB=nest
+    ports:
+      - 5435:5432
+    networks:
+      - freecodecamp
 networks:
-  freecodecamp
+  freecodecamp:
