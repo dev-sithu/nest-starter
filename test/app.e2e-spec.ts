@@ -2,9 +2,11 @@ import { INestApplication } from '@nestjs/common/interfaces';
 import { ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
+import { PrismaService } from '../src/prisma/prisma.service';
 
 describe('App e2e test', () => {
   let app: INestApplication;
+  let prisma: PrismaService;
 
   // tear up
   beforeAll(async () => {
@@ -20,6 +22,9 @@ describe('App e2e test', () => {
     ));
 
     await app.init();
+
+    prisma = app.get(PrismaService);
+    prisma.cleanDb();
   });
 
   // tear down
@@ -28,5 +33,4 @@ describe('App e2e test', () => {
   })
 
   it.todo('should pass');
-  it.todo('should pass 2');
 });
