@@ -4,6 +4,7 @@ import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { AuthDto } from "../src/auth/dto";
+import { EditUserDto } from "../src/user/dto";
 import * as pactum from 'pactum';
 
 describe('App e2e test', () => {
@@ -106,14 +107,41 @@ describe('App e2e test', () => {
           .post('/auth/signin')
           .withBody(dto)
           .expectStatus(200)
+          .stores('userAccessToken', 'accessToken');
       });
     });
   });
 
   describe('User', () => {
-    describe('Get me', () => {});
+    describe('Get me', () => {
+      it('Should get the current user', () => {
+        return pactum.spec()
+          .get('/users/me')
+          .withHeaders({
+            'Authorization': 'Bearer $S{userAccessToken}'
+          })
+          .expectStatus(200);
+      });
+    });
 
-    describe('Edit user', () => {});
+    describe('Edit user', () => {
+      it('Should update user', () => {
+        const dto: EditUserDto = {
+          email: 'vlad@gmail.com',
+          firstName: 'Vlad',
+        };
+
+        return pactum.spec()
+          .patch('/users')
+          .withHeaders({
+            'Authorization': 'Bearer $S{userAccessToken}'
+          })
+          .withBody(dto)
+          .expectStatus(200)
+          .expectBodyContains(dto.email)
+          .expectBodyContains(dto.firstName)
+      })
+    });
   });
 
   describe('Bookmarks', () => {
