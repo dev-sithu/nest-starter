@@ -23,6 +23,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
     delete user.hash;
 
+    // The user object will be injected to Express.Request
+    // and then parsed by src/auth/decorator/get-user.decorator.ts
     return user;
   }
 }

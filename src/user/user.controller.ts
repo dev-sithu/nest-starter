@@ -10,16 +10,23 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private userService: UserService) {}
 
+  /**
+   * GET /users/me
+   */
   @Get('me')
   getMe(@GetUser() user: User) {
     return user;
   }
 
+  /**
+   * PATCH /users
+   */
   @Patch()
   edit(
     @GetUser('id') userId: number,
     @Body() dto: EditUserDto
   ) {
+    // @GetUser() decorator will return request.user injected by src/auth/strategy/jwt.strategy.ts -> validate()
     return this.userService.updateUser(userId, dto);
   }
 }
