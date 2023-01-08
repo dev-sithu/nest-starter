@@ -1,10 +1,10 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
-  HttpException, NotFoundException,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
@@ -22,11 +22,17 @@ import { EditBookmarkDto } from './dto/edit-bookmark.dto';
 export class BookmarkController {
   constructor(private bookmarkService: BookmarkService) {}
 
+  /**
+   * GET /bookmarks
+   */
   @Get()
   getBookmarks(@GetUser('id') userId: number) {
     return this.bookmarkService.getBookmarks(userId);
   }
 
+  /**
+   * GET /bookmarks/{id}
+   */
   @Get(':id')
   getBookmarkById(
     @GetUser('id') userId: number,
@@ -35,6 +41,9 @@ export class BookmarkController {
     return this.bookmarkService.getBookmarkById(userId, bookmarkId);
   }
 
+  /**
+   * POST /bookmarks
+   */
   @Post()
   createBookmark(
     @GetUser('id') userId: number,
@@ -43,6 +52,9 @@ export class BookmarkController {
     return this.bookmarkService.createBookmark(userId, dto);
   }
 
+  /**
+   * PATCH /bookmarks/{id}
+   */
   @Patch(':id')
   editBookmarkById(
     @GetUser('id') userId: number,
@@ -52,6 +64,10 @@ export class BookmarkController {
     return this.bookmarkService.editBookmarkById(userId, bookmarkId, dto);
   }
 
+  /**
+   * DELETE /bookmarks/{id}
+   */
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   deleteBookmarkById(
     @GetUser('id') userId: number,

@@ -10,6 +10,6 @@ export class EditBookmarkDto {
   description?: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   link?: string;
 }
