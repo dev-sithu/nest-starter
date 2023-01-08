@@ -20,6 +20,30 @@ Resource:
 $ npm install
 ```
 
+## Setup env variables
+
+Copy `.env.default` to `.env` and change the content to
+
+
+    DATABASE_URL="postgresql://postgres:postgrespw@localhost:5432/nest?schema=public"
+    JWT_SECRET="nest-super-secret"
+
+Copy `.env.default` to `.env.test` and change the content to
+
+
+    DATABASE_URL="postgresql://postgres:postgrespw@localhost:5435/nest?schema=public"
+    JWT_SECRET="nest-super-secret"
+
+## Database setup with docker
+
+```bash
+# development
+$ npm run db:dev:restart
+
+# testing
+$ npm run db:test:restart
+```
+
 ## Running the app
 
 ```bash
